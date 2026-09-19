@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Максим Брылёв — Начинающий AI-разработчик</title>
+  <style>
+    /* ===== СТИЛИ ДЛЯ ФОТО НА ГЛАВНОМ ЭКРАНЕ ===== */
+.hero-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;       /* Делает фото идеально круглым */
+  object-fit: cover;        /* Обрезает лишнее, сохраняя пропорции, чтобы кота не сплющило */
+  border: 4px solid white;  /* Белая аккуратная рамка (контраст с градиентом фона) */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Легкая тень для объема */
+  margin-bottom: 1.5rem;    /* Отступ между фото и именем */
+  animation: fadeInUp 0.8s ease; /* Плавное появление вместе с текстом */
+  display: block;           /* Убирает лишние отступы снизу у картинки */
+}
+
+/* Адаптив: на телефоне делаем фото чуть меньше, чтобы не занимало весь экран */
+@media (max-width: 768px) {
+  .hero-photo {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* ===== ПЕРЕМЕННЫЕ ТЕМЫ ===== */
+    :root {
+      --bg: #f5f7fa;
+      --bg-card: #ffffff;
+      --text: #2d3436;
+      --text-muted: #636e72;
+      --accent: #2563eb;
+      --accent-light: #a29bfe;
+      --border: #dfe6e9;
+      --shadow: rgba(108, 92, 231, 0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a2e;
+      --bg-card: #16213e;
+      --text: #e8e8e8;
+      --text-muted: #2d3436;
+      --accent: #a29bfe;
+      --accent-light: #6c5ce7;
+      --border: #2d3a5f;
+      --shadow: rgba(162, 155, 254, 0.2);
+    }
+
+    /* ===== БАЗОВЫЕ СТИЛИ ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* ===== НАВБАР ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      transition: background 0.3s ease;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    /* ===== HERO (ПЕРВЫЙ ЭКРАН) ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .hero .subtitle {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease 0.2s backwards;
+    }
+
+    .hero .about-text {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease 0.4s backwards;
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--accent);
+      border: none;
+      padding: 0.9rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.8s ease 0.6s backwards;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ===== СЕКЦИИ ===== */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    /* ===== БЛОК «ОБО МНЕ» ===== */
+    #about p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* ===== КАРТОЧКИ «ЧТО ХОЧУ СОЗДАВАТЬ» ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px var(--shadow);
+    }
+
+    .card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ===== ПРОЕКТЫ ===== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px var(--shadow);
+    }
+
+    .project-card .project-img {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+
+    .project-card .project-body {
+      padding: 1.5rem;
+    }
+
+    .project-card h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .project-card .tag {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--accent);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    /* ===== КОНТАКТЫ ===== */
+    #contacts {
+      text-align: center;
+    }
+
+    .contacts-list {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .contacts-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .contacts-list a:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    /* ===== ФУТЕР ===== */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+   /* ===== KEYFRAMES ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ФОТО НА ПЕРВОМ ЭКРАНЕ ===== */
+    .hero-photo {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    /* ===== ПАСХАЛКА ===== */
+    .easter-egg {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: var(--accent);
+      color: white;
+      padding: 1.5rem 2.5rem;
+      border-radius: 16px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .easter-egg.show {
+      display: block;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* ===== АДАПТИВ ДЛЯ ТЕЛЕФОНА ===== */
+     @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .hero .subtitle { font-size: 1.1rem; }
+      .hero-photo { width: 150px; height: 150px; }
+      section h2 { font-size: 1.5rem; }
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      nav { padding: 1rem; }
+      section { padding: 3rem 1.5rem; }
+      .contacts-list { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- НАВБАР -->
+  <nav>
+    <div class="logo">Максим Брылёв</div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему">🌙</button>
+  </nav>
+
+  <!-- ПЕРВЫЙ ЭКРАН -->
+  <div class="hero">
+    <img src="photo.jpg" alt="Максим Брылёв" class="hero-photo" id="easter-photo">
+
+    <!-- ПАСХАЛКА -->
+    <div id="easter-egg" class="easter-egg">🎉 Пасхалка найдена! Ты любопытный!</div>
+
+    <h1>Максим Брылёв</h1>
+    <p class="subtitle">Начинающий AI-разработчик</p>
+    <p class="about-text">Я начинаю свой путь в мире искусственного интеллекта и веб-разработки. Учусь создавать умные приложения и красивые сайты.</p>
+    <button class="btn-primary" onclick="scrollToProjects()">Посмотреть, что я сделал</button>
+  </div>
+
+  <!-- ОБО МНЕ -->
+  <section id="about" class="reveal">
+    <h2>Обо мне</h2>
+    <p>Мне 17 лет. Увлекаюсь компьютерными играми, такими как Counter‑Strike 2, Dota 2, Valorant. Также мне очень интересна тема искусственного интеллекта и программирования. Хочу изучать эту тему и научиться создавать собственные проекты.</p>
+  </section>
+
+  <!-- ЧТО ХОЧУ НАУЧИТЬСЯ СОЗДАВАТЬ -->
+  <section id="learn" class="reveal">
+    <h2>Что я хочу научиться создавать</h2>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="icon">🌐</div>
+        <h3>Сайты</h3>
+        <p>Современные адаптивные сайты, которые красиво выглядят на любом устройстве и работают быстро.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h3>Telegram-боты</h3>
+        <p>Умных ботов для Telegram, которые помогают пользователям, отвечают на вопросы и автоматизируют задачи.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>AI-приложения</h3>
+        <p>Приложения на основе искусственного интеллекта, которые понимают текст, изображения и помогают людям.</p>
+      </div>
+       <div class="card">
+      <div class="icon">🎮</div>
+       <h3>Мобильные игры</h3>
+        <p>Простые мобильные игры, в которые было бы интересно играть.</p>
+    </div>
+  </section>
+
+  <!--МОИ ПРОЕКТЫ  -->
+  <section id="projects" class="reveal">
+    <h2>Мои проекты</h2>
+    <divМои проекты class="projects-grid">
+      <div class="project-card">
+        <div class="project-img">🚀</div>
+        <div class="project-body">
+          <h3>Мой первый сайт</h3>
+          <p>Персональный одностраничный сайт, созданный на HTML, CSS и JavaScript. Первый шаг в веб-разработке.</p>
+          <span class="tag">HTML · CSS · JavaScript</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section id="contacts" class="reveal">
+    <h2>Контакты</h2>
+    <p>Свяжитесь со мной — буду рад общению и сотрудничеству!</p>
+    <div class="contacts-list">
+      <a href="https://t.me/@Flintyyy" target="_blank">💬 Telegram</a>
+      <a href="mailto:flintyyy52@gmail.com">✉️ Email</a>
+      <a href="https://github.com/ваш_ник" target="_blank">🐙 GitHub</a>
+
+         </div>
+  </section>
+
+  <!-- ФУТЕР -->
+  <footer>
+    <p>© 2026 Максим Брылёв. Сделано с ❤️ во время обучения.</p>
+  </footer>
+
+  <script>
+    // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      if (current === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        document.querySelector('.theme-toggle').textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.querySelector('.theme-toggle').textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // ВОССТАНОВЛЕНИЕ ТЕМЫ ПРИ ЗАГРУЗКЕ
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.querySelector('.theme-toggle').textContent = '☀️';
+    }
+
+    // ===== ПРОКРУТКА К ПРОЕКТАМ =====
+    function scrollToProjects() {
+      document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+    // ===== АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ПРИ ПРОКРУТКЕ =====
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // ===== ПАСХАЛКА: 5 кликов по фото =====
+    let clickCount = 0;
+
+    const easterPhoto = document.getElementById('easter-photo');
+    const easterEgg = document.getElementById('easter-egg');
+
+    easterPhoto.addEventListener('click', function() {
+      clickCount++;
+
+      easterPhoto.style.transform = 'scale(0.95)';
+      setTimeout(function() {
+        easterPhoto.style.transform = '';
+      }, 150);
+
+      if (clickCount === 5) {
+        easterEgg.classList.add('show');
+        clickCount = 0;
+      }
+    });
+
+    easterEgg.addEventListener('click', function() {
+      easterEgg.classList.remove('show');
+    });
+  </script>
+
+</body>
+</html>
